@@ -2,9 +2,11 @@
 
 # WIP - not ready yet
 
-This is a Helm chart for [Open Policy Agnent (OPA)](https://www.openpolicyagent.org/docs/latest/kubernetes-tutorial/).
+This is a Helm chart for [Open Policy Agent (OPA)](https://www.openpolicyagent.org/docs/latest/kubernetes-tutorial/).
 
 ## How to install
+
+### Prerequisites
 
 Label kube-system namespace so that OPA does not control the resources in those namespaces:
 ```bash
@@ -47,6 +49,8 @@ Create a Secret to store the TLS credentials for OPA:
 ```bash
 kubectl create secret tls opa-server --cert=server.crt --key=server.key --namespace opa
 ```
+
+### Chart installation
 
 Install the chart:
 ```sh
