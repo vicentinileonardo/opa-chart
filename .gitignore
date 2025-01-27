@@ -24,8 +24,7 @@ go.work.sum
 # env file
 .env
 
-/opa/certs/
-/opa/certs/*
+/certs/
 /certs/*
 webhook-configuration.yaml
 
