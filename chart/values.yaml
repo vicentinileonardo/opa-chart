@@ -6,6 +6,7 @@ opa:
   name: opa
   image:
     repository: openpolicyagent/opa
+    # when updating the image tag, also update the appVersion in chart/Chart.yaml
     tag: "0.70.0"
   args:
     - "run"
