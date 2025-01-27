@@ -2,7 +2,7 @@
 
 # WIP - not ready yet
 
-This is a Helm chart for [Open Policy Agent (OPA)](https://www.openpolicyagent.org/docs/latest/kubernetes-tutorial/).
+This is a Helm chart for [Open Policy Agent (OPA)](https://www.openpolicyagent.org/docs/latest/kubernetes-tutorial/) used as an admission controller in Kubernetes.
 
 ## How to install
 
