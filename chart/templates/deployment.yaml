@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      name: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.opa.name }}
+          image: "{{ .Values.opa.image.repository }}:{{ .Values.opa.image.tag }}"
+          args:
+            {{- range .Values.opa.args }}
+            - {{ . | quote }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.opa.resources | nindent 12 }}
+          volumeMounts:
+            {{- range .Values.opa.volumeMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              readOnly: {{ .readOnly }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configMaps.envConfig.name }}
+          readinessProbe:
+            {{- toYaml .Values.opa.readinessProbe | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.opa.livenessProbe | nindent 12 }}
+
+        - name: {{ .Values.kubeMgmt.name }}
+          image: "{{ .Values.kubeMgmt.image.repository }}:{{ .Values.kubeMgmt.image.tag }}"
+          args:
+            {{- range .Values.kubeMgmt.args }}
+            - {{ . | quote }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.kubeMgmt.resources | nindent 12 }}
+
+      volumes:
+        {{- range .Values.volumes }}
+        - name: {{ .name }}
+          {{- if .secret }}
+          secret:
+            secretName: {{ .secret.secretName }}
+          {{- end }}
+          {{- if .configMap }}
+          configMap:
+            name: {{ .configMap.name }}
+          {{- end }}
+        {{- end }}

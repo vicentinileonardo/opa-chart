@@ -1,0 +1,8 @@
+# Define role for OPA/kube-mgmt to update configmaps with policy status.
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.rbac.role.name }}
+rules:
+{{- toYaml .Values.rbac.role.rules | nindent 2 }}

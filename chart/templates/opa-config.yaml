@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMaps.opaConfig.name }}
+  namespace: {{ .Values.namespace }}
+data:
+  opa-config.yaml: |
+    {{- toYaml .Values.configMaps.opaConfig.data | nindent 4 }}

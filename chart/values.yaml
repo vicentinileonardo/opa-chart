@@ -1,0 +1,118 @@
+name: opa
+namespace: opa
+replicaCount: 1
+
+opa:
+  name: opa
+  image:
+    repository: openpolicyagent/opa
+    tag: "0.70.0"
+  args:
+    - "run"
+    - "--server"
+    - "--tls-cert-file=/certs/tls.crt"
+    - "--tls-private-key-file=/certs/tls.key"
+    - "--addr=0.0.0.0:8443"
+    - "--addr=http://127.0.0.1:8181"
+    - "--config-file=/config/opa-config.yaml"
+    - "--log-level=debug"
+    - "--log-format=json-pretty"
+    - "--set=status.console=true"
+    - "--set=decision_logs.console=true"
+  resources:
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+  volumeMounts:
+    - name: opa-server
+      mountPath: /certs
+      readOnly: true
+    - name: opa-config
+      mountPath: /config
+      readOnly: true
+  readinessProbe:
+    httpGet:
+      path: /health?plugins&bundle
+      scheme: HTTPS
+      port: 8443
+    initialDelaySeconds: 3
+    periodSeconds: 5
+  livenessProbe:
+    httpGet:
+      path: /health
+      scheme: HTTPS
+      port: 8443
+    initialDelaySeconds: 3
+    periodSeconds: 5
+
+kubeMgmt:
+  name: kube-mgmt
+  image:
+    repository: openpolicyagent/kube-mgmt
+    tag: "2.0.1"
+  args:
+    # the following args are required for the kube-mgmt to replicate the correct resources and versions 
+    - "--replicate=composition.krateo.io/v1-2-0/vmtemplates.composition.krateo.io"
+  resources:
+    limits:
+      memory: "128Mi"
+      cpu: "250m"
+    requests:
+      memory: "64Mi"
+      cpu: "125m"
+
+volumes:
+  - name: opa-server
+    secret:
+      secretName: opa-server
+  - name: opa-config
+    configMap:
+      name: opa-config
+
+rbac:
+  clusterRoleBinding:
+    name: opa-viewer
+    roleRef:
+      name: view
+  role:
+    name: configmap-modifier
+    rules:
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["update", "patch"]
+  roleBinding:
+    name: opa-configmap-modifier
+
+service:
+  name: opa
+  ports:
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 8443
+
+configMaps:
+  opaConfig:
+    name: opa-config
+    data:
+      services:
+        dockerhub-registry:
+          url: https://registry.hub.docker.com
+          type: oci
+      bundles:
+        authz:
+          service: dockerhub-registry
+          resource: docker.io/leovice/opa-bundle-scheduling:latest
+          persist: false
+          polling:
+            min_delay_seconds: 60
+            max_delay_seconds: 120
+  
+  envConfig:
+    name: opa-env-config
+    data:
+      SCHEDULER_URL: "http://ai-inference-server-mock.ai-inference-server-mock.svc.cluster.local:8080/scheduling"
+
