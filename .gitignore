@@ -23,3 +23,10 @@ go.work.sum
 
 # env file
 .env
+
+/opa/certs/
+/opa/certs/*
+/certs/*
+webhook-configuration.yaml
+
+.DS_Store
