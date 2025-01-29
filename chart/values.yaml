@@ -87,6 +87,27 @@ rbac:
   roleBinding:
     name: opa-configmap-modifier
 
+# need to enable custom RBAC to create the custom roles for CRDs
+customRBAC:
+  enabled: true
+  roles:
+    - name: krateo-viewer
+      rules:
+        - apiGroups: 
+            - "composition.krateo.io"
+          resources: 
+            - "vmtemplates"
+          verbs: 
+            - "list"
+            - "watch"
+            - "get"
+    # You can add more roles here if needed
+    # - name: another-role
+    #   rules:
+    #     - apiGroups: ["some.api.group"]
+    #       resources: ["resource-type"]
+    #       verbs: ["list", "watch", "get"]
+
 service:
   name: opa
   ports:

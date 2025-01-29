@@ -29,3 +29,6 @@ go.work.sum
 webhook-configuration.yaml
 
 .DS_Store
+
+/staging/
+/staging/*
