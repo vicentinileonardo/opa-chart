@@ -8,9 +8,15 @@ This is a Helm chart for [Open Policy Agent (OPA)](https://www.openpolicyagent.o
 
 ### Prerequisites
 
-Label kube-system namespace so that OPA does not control the resources in those namespaces:
+Create a namespace for OPA:
+```sh
+kubectl create namespace opa
+```
+
+Label `kube-system` and `opa` namespaces so that OPA does not control the resources in those namespaces:
 ```bash
 kubectl label ns kube-system openpolicyagent.org/webhook=ignore
+kubectl label ns opa openpolicyagent.org/webhook=ignore
 ```
 
 Communication between Kubernetes and OPA must be secured using TLS. 
