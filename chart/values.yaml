@@ -23,10 +23,10 @@ opa:
   resources:
     limits:
       memory: "256Mi"
-      cpu: "500m"
+      cpu: "400m"
     requests:
       memory: "128Mi"
-      cpu: "250m"
+      cpu: "200m"
   volumeMounts:
     - name: opa-server
       mountPath: /certs
@@ -60,10 +60,10 @@ kubeMgmt:
   resources:
     limits:
       memory: "128Mi"
-      cpu: "250m"
+      cpu: "200m"
     requests:
       memory: "64Mi"
-      cpu: "125m"
+      cpu: "100m"
 
 volumes:
   - name: opa-server
@@ -116,4 +116,3 @@ configMaps:
     name: opa-env-config
     data:
       SCHEDULER_URL: "http://ai-inference-server-mock.ai-inference-server-mock.svc.cluster.local:8080/scheduling"
-
