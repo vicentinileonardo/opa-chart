@@ -24,3 +24,7 @@ kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa update
 yes
 kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa patch configmaps
 yes
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa list configmaps
+yes
+kubectl auth can-i --as=system:serviceaccount:opa:default list configmaps
+no
