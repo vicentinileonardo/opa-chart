@@ -83,7 +83,7 @@ rbac:
     rules:
     - apiGroups: [""]
       resources: ["configmaps"]
-      verbs: ["update", "patch"]
+      verbs: ["update", "patch", "get", "list"]
   roleBinding:
     name: opa-configmap-modifier
 

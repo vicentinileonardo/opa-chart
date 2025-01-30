@@ -9,3 +9,18 @@ The token should be a Bearer token.
 # - "--set=services.dockerhub-registry.credentials.bearer.scheme=Bearer"
 # - "--set=services.dockerhub-registry.credentials.bearer.token=/path/to/token"
 ```
+
+
+## RBAC
+
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa list vmtemplates.composition.krateo.io
+yes
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa watch vmtemplates.composition.krateo.io
+yes
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa get vmtemplates.composition.krateo.io
+yes
+
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa update configmaps
+yes
+kubectl auth can-i --as=system:serviceaccount:opa:default --namespace=opa patch configmaps
+yes
