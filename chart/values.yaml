@@ -123,12 +123,12 @@ configMaps:
     data:
       services:
         dockerhub-registry:
-          url: https://registry.hub.docker.com
+          url: "https://registry.hub.docker.com"
           type: oci
       bundles:
         authz:
           service: dockerhub-registry
-          resource: docker.io/leovice/opa-bundle-scheduling:latest
+          resource: "docker.io/leovice/opa-bundle-scheduling:latest"
           persist: false
           polling:
             min_delay_seconds: 60

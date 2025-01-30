@@ -4,5 +4,25 @@ metadata:
   name: {{ .Values.configMaps.opaConfig.name }}
   namespace: {{ .Values.namespace }}
 data:
-  opa-config.yaml: |
-    {{- toYaml .Values.configMaps.opaConfig.data | nindent 4 }}
+  opa-config.yaml: |-
+    services:
+      {{- range $svcName, $svc := .Values.configMaps.opaConfig.data.services }}
+      {{ $svcName }}:
+        {{- range $key, $value := $svc }}
+        {{ $key }}: {{ if or (eq $key "url") (eq $key "resource") }}{{ quote $value }}{{ else }}{{ $value }}{{ end }}
+        {{- end }}
+      {{- end }}
+    bundles:
+      {{- range $bundleName, $bundle := .Values.configMaps.opaConfig.data.bundles }}
+      {{ $bundleName }}:
+        {{- range $key, $value := $bundle }}
+        {{- if eq $key "polling" }}
+        polling:
+          {{- range $pKey, $pValue := $value }}
+          {{ $pKey }}: {{ $pValue }}
+          {{- end }}
+        {{- else }}
+        {{ $key }}: {{ if eq $key "resource" }}{{ quote $value }}{{ else }}{{ $value }}{{ end }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
