@@ -74,10 +74,11 @@ volumes:
       name: opa-config
 
 rbac:
-  clusterRoleBinding:
-    name: opa-viewer
-    roleRef:
-      name: view
+  # view is not ok
+  #clusterRoleBinding:
+  #  name: opa-viewer
+  #  roleRef:
+  #    name: view
   role:
     name: configmap-modifier
     rules:
@@ -96,7 +97,7 @@ customRBAC:
         - apiGroups: 
             - "composition.krateo.io"
           resources: 
-            - "vmtemplates"
+            - "vmtemplates.composition.krateo.io"
           verbs: 
             - "list"
             - "watch"
